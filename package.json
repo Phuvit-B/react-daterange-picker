@@ -4,11 +4,11 @@
   "description": "MUI-style date range picker for React. Zero runtime dependencies.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Poovit-B/react-daterange.git"
+    "url": "git+https://github.com/Poovit-B/react-daterange-picker.git"
   },
-  "homepage": "https://github.com/Poovit-B/react-daterange#readme",
+  "homepage": "https://github.com/Poovit-B/react-daterange-picker#readme",
   "bugs": {
-    "url": "https://github.com/Poovit-B/react-daterange/issues"
+    "url": "https://github.com/Poovit-B/react-daterange-picker/issues"
   },
   "publishConfig": {
     "access": "public"
