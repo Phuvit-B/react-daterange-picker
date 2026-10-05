@@ -5,12 +5,12 @@ No runtime dependencies, about 10 KB, and there is no CSS file to import — the
 come along with the component.
 
 ```bash
-npm i @poovit-b/daterange
+npm i @phuvit-b/daterange
 ```
 
 ```tsx
 import { useState } from "react";
-import { DateRangePicker, type DateRange } from "@poovit-b/daterange";
+import { DateRangePicker, type DateRange } from "@phuvit-b/daterange";
 
 function Booking() {
   const [range, setRange] = useState<DateRange>([null, null]);
@@ -329,7 +329,7 @@ occasionally not what the form next to it is doing. When you need the exact layo
 the function from a pattern:
 
 ```tsx
-import { pattern } from "@poovit-b/daterange";
+import { pattern } from "@phuvit-b/daterange";
 
 <DateRangePicker ... format={pattern("DD/MM/BBBB")} />            // 06/10/2569 – 14/10/2569
 <DateRangePicker ... format={pattern("MM/DD/YYYY")} />            // 10/06/2026 – 10/14/2026
@@ -360,7 +360,7 @@ don't use it.
 `YYYY-MM-DD`, use the helper rather than `toISOString()`:
 
 ```tsx
-import { toISODate } from "@poovit-b/daterange";
+import { toISODate } from "@phuvit-b/daterange";
 
 fetch(`/bookings?from=${toISODate(start)}&to=${toISODate(end)}`);
 ```
