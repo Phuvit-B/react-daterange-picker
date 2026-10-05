@@ -1,0 +1,58 @@
+/* Copy any of these into your own stylesheet and rename the class. */
+
+/* Square, flat, green — no rounded anything */
+.theme-square {
+  --drp-accent: #0f9d58;
+  --drp-accent-contrast: #fff;
+  --drp-band: #e2f3ea;
+  --drp-surface: #fff;
+  --drp-text: #14341f;
+  --drp-muted: #8aa394;
+  --drp-day-radius: 2px;
+  --drp-radius: 2px;
+  --drp-panel-radius: 2px;
+}
+
+/* Dense — fits a sidebar or a table toolbar */
+.theme-compact {
+  --drp-cell: 28px;
+  --drp-day: 24px;
+  --drp-gap: 14px;
+  --drp-radius: 5px;
+  --drp-duration: .14s;
+  --drp-slide: 14px;
+}
+
+/* Always dark, whatever the OS says */
+.theme-night {
+  --drp-accent: #c084fc;
+  --drp-accent-contrast: #1a1125;
+  --drp-band: #32204a;
+  --drp-surface: #171022;
+  --drp-text: #ede6f7;
+  --drp-muted: #8b7da3;
+  --drp-border: #3b2d4f;
+  --drp-hover: rgba(255, 255, 255, .09);
+  --drp-shadow: 0 10px 34px rgba(0, 0, 0, .6);
+}
+
+/* Big, slow, no slide — a booking page where the calendar is the whole UI */
+.theme-roomy {
+  --drp-accent: #b45309;
+  --drp-band: #fdf0dd;
+  --drp-surface: #fffdf9;
+  --drp-text: #3a2a15;
+  --drp-muted: #b09877;
+  --drp-cell: 52px;
+  --drp-day: 46px;
+  --drp-gap: 40px;
+  --drp-panel-radius: 20px;
+  --drp-slide: 0;
+  --drp-duration: .35s;
+  --drp-font: Georgia, "Times New Roman", serif;
+}
+
+/* Thai: the era comes from the locale prop, the font comes from here */
+.theme-thai {
+  --drp-font: "Noto Sans Thai", system-ui, sans-serif;
+}

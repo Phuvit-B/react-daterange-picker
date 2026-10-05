@@ -1,0 +1,52 @@
+/*
+ * well-dtm-provider-portal, rebuilt as variables.
+ * Values taken from src/styles/theme.json and the mapping already in
+ * src/components/Inputs/DateRange/styled.jsx — token name in the comment.
+ */
+.well {
+  --drp-accent: #5c26ce;            /* COLORS.BLUE_1  — selected day, as in the portal */
+  --drp-accent-contrast: #ffffff;   /* COLORS.WHITE_1 */
+  --drp-band: #e3edff;              /* COLORS.BLUE_3  — the range stripe */
+  --drp-band-text: #1751ae;         /* COLORS.BLUE_4  — days inside the stripe */
+  --drp-surface: #ffffff;           /* COLORS.WHITE_1 */
+  --drp-text: #000000;              /* COLORS.BLACK_1 — day numbers */
+  --drp-muted: #b3b3b3;             /* COLORS.GRAY_4  — weekday letters, disabled */
+  --drp-border: #f2f2f2;            /* COLORS.GRAY_1  — the field */
+  --drp-hover: #f2ecff;             /* COLORS.PURPLE_5 */
+  --drp-shadow: 1px 1px 6px 0 #e7e7e7;  /* COLORS.GRAY_3, same as the portal popover */
+  --drp-font: "Noto Sans Thai", "Poppins", sans-serif;  /* FONTS.FAMILY */
+  --drp-panel-radius: 20px;         /* .calendar in styled.jsx */
+  --drp-day-radius: 50%;            /* days are circles */
+  --drp-radius: 999px;              /* so the range stripe ends in a matching curve */
+  --drp-nav-size: 38px;
+  /* .control is 40px tall with a 20px radius — a capsule, not a rounded box.
+     9px rather than the portal's 10px: it sets height:40px, we grow from the padding
+     and the 1px borders, so 9 + 20 line + 9 + 2 lands on the same 40. */
+  --drp-field-radius: 20px;
+  --drp-field-padding: 9px 30px 9px 20px;
+  --drp-field-text: #5c26ce;        /* COLORS.BLUE_1 — the portal colours a filled field */
+  --drp-field-width: 100%;          /* the portal control fills its column */
+  --drp-highlight: #fd6203;         /* COLORS.ORANGE_1 */
+}
+
+/* The same tokens read as a dark theme; nothing in the portal uses this yet. */
+.well-dark {
+  --drp-accent: #8b5cf6;
+  --drp-accent-contrast: #ffffff;
+  --drp-band: #22479e;              /* COLORS.PURPLE_9 */
+  --drp-band-text: #e3edff;         /* COLORS.BLUE_3 */
+  --drp-surface: #1a1726;
+  --drp-text: #ececec;              /* COLORS.GRAY_9 */
+  --drp-muted: #818181;             /* COLORS.GRAY_10 */
+  --drp-border: #575656;            /* COLORS.GRAY_2 */
+  --drp-hover: rgba(255, 255, 255, .08);
+  --drp-shadow: 0 10px 30px rgba(0, 0, 0, .55);
+  --drp-font: "Noto Sans Thai", "Poppins", sans-serif;
+  --drp-panel-radius: 20px;
+  --drp-day-radius: 50%;
+  --drp-radius: 999px;
+  --drp-nav-size: 38px;
+  --drp-field-radius: 20px;
+  --drp-field-padding: 9px 30px 9px 20px;
+  --drp-field-text: #c4b5fd;
+}

@@ -1,0 +1,60 @@
+{
+  "name": "@poovit-b/daterange",
+  "version": "0.1.0",
+  "description": "MUI-style date range picker for React. Zero runtime dependencies.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Poovit-B/react-daterange.git"
+  },
+  "homepage": "https://github.com/Poovit-B/react-daterange#readme",
+  "bugs": {
+    "url": "https://github.com/Poovit-B/react-daterange/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "dev": "vite demo",
+    "test": "tsx src/calendar.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0"
+  },
+  "keywords": [
+    "react",
+    "date",
+    "daterange",
+    "datepicker",
+    "calendar",
+    "range"
+  ],
+  "license": "MIT"
+}
