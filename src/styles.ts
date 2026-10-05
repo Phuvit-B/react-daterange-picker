@@ -55,10 +55,12 @@ const css = `
   line-height:1;font-size:9px;color:var(--drp-highlight);pointer-events:none}
 .drp-day .drp-mark svg{width:9px;height:9px;display:block}
 .drp-day[aria-selected="true"].hl::before,.drp-day[aria-selected="true"] .drp-mark{color:var(--drp-accent-contrast);background:var(--drp-accent-contrast)}
-.drp-field{position:relative;display:inline-block;font:14px/1.4 var(--drp-font)}
+/* The width lives on the wrapper: an inline-block with no width shrinks to whatever
+   text is inside, so an empty field would be narrower than a filled one. */
+.drp-field{position:relative;display:inline-block;width:var(--drp-field-width);font:14px/1.4 var(--drp-font)}
 /* Flex rather than an absolutely placed icon: the gap does the spacing, so a theme's
    padding never has to leave room for it. */
-.drp-input{width:var(--drp-field-width);box-sizing:border-box;padding:var(--drp-field-padding);border:1px solid var(--drp-border);
+.drp-input{width:100%;box-sizing:border-box;padding:var(--drp-field-padding);border:1px solid var(--drp-border);
   border-radius:var(--drp-field-radius);background:var(--drp-surface);cursor:pointer;font:inherit;
   color:var(--drp-field-text,var(--drp-text));display:flex;align-items:center;gap:8px}
 .drp-value{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -76,7 +78,7 @@ const css = `
   .drp{--drp-gap:16px;padding:8px}
   .drp-grid{grid-template-columns:repeat(7,min(var(--drp-cell),12vw))}
   .drp-day{width:min(var(--drp-day),11vw);height:min(var(--drp-day),11vw)}
-  .drp-input{width:100%;box-sizing:border-box}
+  .drp-field{width:100%}
 }
 `;
 let done = false;

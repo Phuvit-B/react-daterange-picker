@@ -26,6 +26,15 @@ function App() {
 
   return (
     <>
+      <Demo title='--drp-field-width: 100% in a 420px column — empty vs filled must match'>
+        <div style={{ width: 420, display: "grid", gap: 10 }}>
+          <DateRangePicker value={[null, null]} onChange={() => {}}
+            style={{ "--drp-field-width": "100%" } as CSSProperties} />
+          <DateRangePicker value={b} onChange={setB}
+            style={{ "--drp-field-width": "100%" } as CSSProperties} />
+        </div>
+      </Demo>
+
       <Demo title="Default">
         <DateRangePicker value={a} onChange={setA} />
       </Demo>

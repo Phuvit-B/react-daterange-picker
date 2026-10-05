@@ -232,7 +232,7 @@ The full version, plus a dark variant built from the same tokens, is in
 | `--drp-text` | `#1c1b1f` | day numbers, month name |
 | `--drp-muted` | `#9aa0a6` | weekday letters, disabled days, arrows at rest |
 | `--drp-border` | `#c4c4c4` | the field's outline |
-| `--drp-field-width` | `230px` | `100%` to fill its column |
+| `--drp-field-width` | `230px` | `100%` to fill its column, whether or not a date is picked |
 | `--drp-field-radius` | `6px` | the field's corners — raise it to half the height for a capsule |
 | `--drp-field-padding` | `10px 12px` | the field's padding, and so its height |
 | `--drp-field-text` | inherits `--drp-text` | the chosen dates in the field; the placeholder is always `--drp-muted` |

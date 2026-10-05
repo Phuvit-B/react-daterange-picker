@@ -1,6 +1,6 @@
 {
   "name": "@phuvit-b/daterange",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MUI-style date range picker for React. Zero runtime dependencies.",
   "repository": {
     "type": "git",
