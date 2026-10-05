@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { DateRangeCalendar, type DateRangeCalendarProps } from "./DateRangeCalendar";
+import { injectStyles } from "./styles";
 import type { DateRange } from "./calendar";
 
 export type DateRangePickerProps = DateRangeCalendarProps & {
@@ -24,6 +25,7 @@ export function DateRangePicker({
   style,
   ...calendar
 }: DateRangePickerProps) {
+  injectStyles();
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
 

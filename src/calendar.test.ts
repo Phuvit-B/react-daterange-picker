@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { monthGrid, nextRange, inRange, compareDay, toISODate, pattern } from "./calendar.ts";
 
@@ -54,4 +55,13 @@ test("a month name never gets re-scanned for tokens", () => {
   // "December" and "March" both contain letters that are tokens on their own.
   assert.equal(pattern("MMMM YYYY", "en-GB")(new Date(2026, 11, 1)), "December 2026");
   assert.equal(pattern("MMMM", "en-GB")(new Date(2026, 2, 1)), "March");
+});
+
+test("every component that can render on its own injects the stylesheet", () => {
+  // DateRangePicker only mounts the calendar once its popover opens, so relying on
+  // the calendar to inject left a closed field completely unstyled.
+  for (const file of ["DateRangeCalendar.tsx", "DateRangePicker.tsx"]) {
+    const src = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert.match(src, /injectStyles\(\)/, `${file} never calls injectStyles()`);
+  }
 });
