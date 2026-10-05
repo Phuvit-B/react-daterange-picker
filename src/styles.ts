@@ -35,8 +35,10 @@ const css = `
 .drp-dow{height:28px;display:grid;place-items:center;color:var(--drp-muted);font-size:12px}
 .drp-cell{position:relative;height:var(--drp-cell);display:grid;place-items:center}
 .drp-cell.in::before{content:"";position:absolute;inset:3px 0;background:var(--drp-band)}
-.drp-cell.in.s::before{border-radius:var(--drp-radius) 0 0 var(--drp-radius);left:3px}
-.drp-cell.in.e::before{border-radius:0 var(--drp-radius) var(--drp-radius) 0;right:3px}
+.drp-cell.in.s::before,.drp-cell.in:nth-child(7n+1)::before{
+  border-start-start-radius:var(--drp-radius);border-end-start-radius:var(--drp-radius);left:3px}
+.drp-cell.in.e::before,.drp-cell.in:nth-child(7n)::before{
+  border-start-end-radius:var(--drp-radius);border-end-end-radius:var(--drp-radius);right:3px}
 .drp-day{all:unset;position:relative;cursor:pointer;width:var(--drp-day);height:var(--drp-day);
   border-radius:var(--drp-day-radius);display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .drp-day:hover:not(:disabled){box-shadow:inset 0 0 0 1px var(--drp-accent)}

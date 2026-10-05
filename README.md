@@ -4,6 +4,8 @@ A date range picker for React that looks like the MUI one, without the licence.
 No runtime dependencies, about 10 KB, and there is no CSS file to import — the styles
 come along with the component.
 
+![A two-month range calendar with a selected range, and the field below it](docs/hero.jpg)
+
 ```bash
 npm i @phuvit-b/daterange
 ```
@@ -43,6 +45,8 @@ There is no prop for this, and for Thai there is nothing to configure either:
 ```
 ตุลาคม 2569          6 ต.ค. 2569 – 14 ต.ค. 2569
 ```
+
+![Thai calendar showing Buddhist years, with marked days and a formatted field](docs/thai.jpg)
 
 Buddhist *is* the default calendar for the Thai locale, so `"th"` already gives you
 พ.ศ. — in the header, in the field, and in the screen-reader labels. Don't be tempted to
@@ -113,6 +117,8 @@ Three ways to set them, all equivalent — pick whichever fits where you work:
 set `--drp-text` and `--drp-muted` too. Otherwise your light pink range band keeps the dark
 theme's white digits and nobody can read the dates. Set the whole group and you've pinned
 your theme to one appearance in both modes, which is usually what a branded picker wants.
+
+![The same calendar in the default, square and night themes](docs/themes.jpg)
 
 ### Themes you can paste
 
