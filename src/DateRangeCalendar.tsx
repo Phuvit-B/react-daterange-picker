@@ -5,7 +5,7 @@ import { injectStyles } from "./styles";
 export type DateRangeCalendarProps = {
   value: DateRange;
   onChange: (value: DateRange) => void;
-  /** Side-by-side months. Default 2, like MUI. */
+  /** Side-by-side months. Default 2. */
   months?: number;
   /** BCP-47 tag for month/weekday names. Defaults to the browser locale. */
   locale?: string;
