@@ -1,6 +1,6 @@
 # react-daterange
 
-A date range picker for React that looks like the MUI one, without the licence.
+A two-month date range picker for React.
 No runtime dependencies, about 10 KB, and there is no CSS file to import — the styles
 come along with the component.
 
