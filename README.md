@@ -268,6 +268,48 @@ for a grid of years. Both are on by default. Turn either off:
 <DateRangePicker pickMonth={false} pickYear={false} />  // just the ‹ › arrows
 ```
 
+## Quick ranges
+
+Buttons beside the months that pick a whole range in one click — "last 7 days", "last 3
+months". Each one is a label and a `[start, end]`:
+
+```tsx
+import { DateRangePicker, lastDays, lastMonths } from "@phuvit-b/daterange";
+
+<DateRangePicker value={range} onChange={setRange} locale="th"
+  presets={[
+    { label: "7 วัน", value: lastDays(7) },
+    { label: "1 เดือน", value: lastMonths(1) },
+    { label: "3 เดือน", value: lastMonths(3) },
+    { label: "6 เดือน", value: lastMonths(6) },
+  ]} />
+```
+
+Both helpers end today and count it in. On 9 November:
+
+| | range |
+|---|---|
+| `lastDays(7)` | 3–9 Nov |
+| `lastMonths(1)` | 10 Oct – 9 Nov |
+| `lastMonths(3)` | 10 Aug – 9 Nov |
+
+Month ends clamp, so on 31 March `lastMonths(1)` is 1–31 March rather than spilling into
+February. Anything else is just a pair of dates — a calendar month, say:
+
+```tsx
+const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+
+{ label: "This month", value: [new Date(y, m, 1), now] }
+{ label: "Last month", value: [new Date(y, m - 1, 1), new Date(y, m, 0)] }  // day 0 = last day of the month before
+```
+
+The button matching the current value is marked `aria-pressed`. Picking one closes the
+popover like any finished range (see `closeOnComplete`). On a phone the buttons move above
+the calendar and wrap.
+
+Build the list when you render, not once at module level: `lastDays(7)` works out "today"
+when it's called, so a list made at import time goes stale past midnight.
+
 ## Marking days
 
 Days worth pointing out — appointments, holidays, the ones that are already booked — take a
@@ -471,7 +513,6 @@ npm run build
 
 ## What it doesn't do
 
-Times, presets like "last 7 days", multiple separate ranges, or arrow-key navigation inside
-the grid. Some of those are a few lines on top of what's here; none of them were needed yet.
+Times, multiple separate ranges, or arrow-key navigation inside the grid. Some of those are a few lines on top of what's here; none of them were needed yet.
 
 MIT
