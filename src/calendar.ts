@@ -45,6 +45,22 @@ export const monthBlocked = (year: number, month: number, min?: Date, max?: Date
   (!!min && compareDay(new Date(year, month + 1, 0), min) < 0) ||
   (!!max && compareDay(new Date(year, month, 1), max) > 0);
 
+/** The last `n` days, today included: lastDays(7) on the 9th is the 3rd–9th. */
+export function lastDays(n: number, today = new Date()): DateRange {
+  const t = startOfDay(today);
+  return [new Date(t.getFullYear(), t.getMonth(), t.getDate() - n + 1), t];
+}
+
+/**
+ * The last `n` months, today included: lastMonths(1) on 9 Nov is 10 Oct – 9 Nov.
+ * Month ends clamp, so on 31 Mar lastMonths(1) is 1–31 Mar rather than spilling into Feb.
+ */
+export function lastMonths(n: number, today = new Date()): DateRange {
+  const t = startOfDay(today);
+  const days = new Date(t.getFullYear(), t.getMonth() - n + 1, 0).getDate();
+  return [new Date(t.getFullYear(), t.getMonth() - n, Math.min(t.getDate(), days) + 1), t];
+}
+
 /**
  * YYYY-MM-DD in the user's own timezone. `toISOString().slice(0,10)` looks like it does
  * this but converts to UTC first, so east of Greenwich it reports the previous day.

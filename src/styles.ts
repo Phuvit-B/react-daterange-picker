@@ -48,6 +48,12 @@ const css = `
 .drp-opt:hover:not(:disabled){background:var(--drp-hover)}
 .drp-opt[aria-selected="true"]{background:var(--drp-accent);color:var(--drp-accent-contrast);font-weight:600}
 .drp-opt:disabled{color:var(--drp-muted);cursor:default}
+.drp-presets{display:flex;flex-direction:column;gap:4px;padding-right:12px;
+  border-right:1px solid var(--drp-border)}
+.drp-preset{all:unset;cursor:pointer;padding:6px 12px;border-radius:var(--drp-radius);white-space:nowrap}
+.drp-preset:hover{background:var(--drp-hover)}
+.drp-preset[aria-pressed="true"]{background:var(--drp-band);color:var(--drp-accent);font-weight:600}
+.drp-preset:focus-visible{outline:2px solid var(--drp-accent);outline-offset:-2px}
 .drp-grid{display:grid;grid-template-columns:repeat(7,var(--drp-cell))}
 .drp-dow{height:28px;display:grid;place-items:center;color:var(--drp-muted);font-size:12px}
 .drp-cell{position:relative;height:var(--drp-cell);display:grid;place-items:center}
@@ -94,7 +100,8 @@ const css = `
 /* Cap at the point of use, not on --drp-cell: a theme's own value would win over ours
    and overflow the screen. min() leaves generous themes alone until they don't fit. */
 @media (max-width:560px){
-  .drp{--drp-gap:16px;padding:8px}
+  .drp{--drp-gap:16px;padding:8px;flex-wrap:wrap}
+  .drp-presets{flex:1 0 100%;flex-direction:row;flex-wrap:wrap;padding:0 0 8px;margin:0;border:0;border-bottom:1px solid var(--drp-border)}
   .drp-grid{grid-template-columns:repeat(7,min(var(--drp-cell),12vw))}
   .drp-picker{width:calc(7 * min(var(--drp-cell),12vw))}
   .drp-day{width:min(var(--drp-day),11vw);height:min(var(--drp-day),11vw)}

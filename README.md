@@ -405,6 +405,7 @@ Both components take these:
 | `highlightDates` | — | `Date[]`, or `(day) => boolean`, for days worth marking |
 | `highlightIcon` | a dot | any node to draw on a marked day instead |
 | `highlightLabel` | — | what the mark means, for screen readers |
+| `presets` | — | `{ label, value: [start, end] }[]` quick-pick buttons; build ranges with `lastDays(n)` / `lastMonths(n)` |
 | `defaultMonth` | `value[0]`, else today | which month opens first |
 | `className` / `style` | — | land on the root element |
 

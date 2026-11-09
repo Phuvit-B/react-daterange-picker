@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 import { useState, type CSSProperties } from "react";
-import { DateRangeCalendar, DateRangePicker, pattern, toISODate, type DateRange } from "../src";
+import { DateRangeCalendar, DateRangePicker, lastDays, lastMonths, pattern, toISODate, type DateRange } from "../src";
 import "./themes.css";
 import "./theme-well.css";
 
@@ -33,6 +33,12 @@ function App() {
           <DateRangePicker value={b} onChange={setB}
             style={{ "--drp-field-width": "100%" } as CSSProperties} />
         </div>
+      </Demo>
+
+      <Demo title="presets — 7 วัน, 1–6 เดือน">
+        <DateRangePicker value={a} onChange={setA} locale={TH} className="theme-thai" placeholder="เลือกช่วงวันที่"
+          presets={[{ label: "7 วัน", value: lastDays(7) },
+            ...[1, 2, 3, 4, 5, 6].map((n) => ({ label: `${n} เดือน`, value: lastMonths(n) }))]} />
       </Demo>
 
       <Demo title="Default">

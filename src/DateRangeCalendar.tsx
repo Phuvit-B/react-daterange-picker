@@ -21,6 +21,11 @@ export type DateRangeCalendarProps = {
   /** What the mark means, appended to the day's spoken label. Silent when omitted. */
   highlightLabel?: string;
   defaultMonth?: Date;
+  /**
+   * Quick-pick buttons beside the months. Build ranges with lastDays / lastMonths, or pass any
+   * [start, end]: [{ label: "7 วัน", value: lastDays(7) }, { label: "1 เดือน", value: lastMonths(1) }]
+   */
+  presets?: { label: string; value: DateRange }[];
   /** Click the month title to jump to a month from a grid. Default true. */
   pickMonth?: boolean;
   /** Click the year to jump to a year from a grid. Default true. */
@@ -33,7 +38,7 @@ export type DateRangeCalendarProps = {
 export function DateRangeCalendar({
   value, onChange, months = 2, locale, weekStartsOn = 0,
   minDate, maxDate, shouldDisableDate, defaultMonth, className = "", style,
-  highlightDates, highlightIcon, highlightLabel, pickMonth = true, pickYear = true,
+  highlightDates, highlightIcon, highlightLabel, pickMonth = true, pickYear = true, presets,
 }: DateRangeCalendarProps) {
   injectStyles();
   const [cursor, setCursor] = useState(() => addMonths(defaultMonth ?? value[0] ?? new Date(), 0));
@@ -204,6 +209,24 @@ export function DateRangeCalendar({
       onPointerDown={onPointerDown} onPointerUp={onPointerUp}
       // the finger lifts on top of a day; without this the swipe would also pick a date
       onClickCapture={(e) => { if (swiped.current) { e.stopPropagation(); swiped.current = false; } }}>
+      {presets?.length ? (
+        <div className="drp-presets" role="group" aria-label="Quick ranges">
+          {presets.map((p) => {
+            const [ps, pe] = p.value;
+            const on = !!(start && end && ps && pe && sameDay(start, ps) && sameDay(end, pe));
+            return (
+              <button type="button" key={p.label} className="drp-preset" aria-pressed={on}
+                onClick={() => {
+                  // land on the month holding the range's end, so "today" is in view
+                  if (pe) { setDir(0); setCursor(addMonths(pe, 1 - shown)); }
+                  onChange(p.value);
+                }}>
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
       {Array.from({ length: shown }, (_, m) => {
         const month = addMonths(cursor, m);
         return (

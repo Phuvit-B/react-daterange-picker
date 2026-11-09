@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { monthGrid, nextRange, inRange, compareDay, toISODate, pattern, yearSpan, monthBlocked } from "./calendar.ts";
+import { monthGrid, nextRange, inRange, compareDay, toISODate, pattern, yearSpan, monthBlocked, lastDays, lastMonths } from "./calendar.ts";
 
 const d = (s: string) => new Date(s + "T00:00:00");
 
@@ -82,4 +82,13 @@ test("a month is blocked only when every day of it is out of bounds", () => {
   assert.ok(!monthBlocked(2026, 9, min, max));   // Oct: 1-5 pickable
   assert.ok(monthBlocked(2026, 10, min, max));   // Nov: all after max
   assert.ok(!monthBlocked(1999, 0));             // no bounds
+});
+
+test("presets end today and count it", () => {
+  const iso = (r: [Date | null, Date | null]) => r.map((x) => toISODate(x!));
+  assert.deepEqual(iso(lastDays(7, d("2026-11-09"))), ["2026-11-03", "2026-11-09"]);
+  assert.deepEqual(iso(lastMonths(1, d("2026-11-09"))), ["2026-10-10", "2026-11-09"]);
+  assert.deepEqual(iso(lastMonths(6, d("2026-11-09"))), ["2026-05-10", "2026-11-09"]);
+  assert.deepEqual(iso(lastMonths(1, d("2026-03-31"))), ["2026-03-01", "2026-03-31"]);
+  assert.deepEqual(iso(lastMonths(2, d("2026-01-15"))), ["2025-11-16", "2026-01-15"]);
 });

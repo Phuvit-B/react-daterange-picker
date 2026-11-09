@@ -1,6 +1,6 @@
 {
   "name": "@phuvit-b/daterange",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Two-month date range picker for React. Zero runtime dependencies.",
   "repository": {
     "type": "git",
