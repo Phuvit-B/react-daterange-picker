@@ -12,7 +12,7 @@
   --drp-text: #000000;              /* COLORS.BLACK_1 — day numbers */
   --drp-muted: #b3b3b3;             /* COLORS.GRAY_4  — weekday letters, disabled */
   --drp-border: #f2f2f2;            /* COLORS.GRAY_1  — the field */
-  --drp-hover: #f2ecff;             /* COLORS.PURPLE_5 */
+  --drp-hover: #bfa3ff66;           /* COLORS.BLUE_5 at 40% — PURPLE_5 was too faint */
   --drp-shadow: 1px 1px 6px 0 #e7e7e7;  /* COLORS.GRAY_3, same as the portal popover */
   --drp-font: "Noto Sans Thai", "Poppins", sans-serif;  /* FONTS.FAMILY */
   --drp-panel-radius: 20px;         /* .calendar in styled.jsx */

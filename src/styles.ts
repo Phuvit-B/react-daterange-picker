@@ -30,7 +30,24 @@ const css = `
   display:grid;place-items:center;color:var(--drp-muted);font-size:calc(var(--drp-nav-size) * .72);line-height:1}
 .drp-nav:hover{background:var(--drp-hover);color:var(--drp-text)}
 .drp-nav:disabled{opacity:.3;cursor:default;background:none}
-.drp-nav:focus-visible,.drp-day:focus-visible{outline:2px solid var(--drp-accent);outline-offset:-2px}
+.drp-nav:focus-visible,.drp-day:focus-visible,.drp-title:focus-visible,.drp-opt:focus-visible{outline:2px solid var(--drp-accent);outline-offset:-2px}
+.drp-title{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:var(--drp-radius);font-weight:600}
+.drp-title:hover:not(.static){background:var(--drp-hover)}
+.drp-title.static{cursor:default}
+.drp-caret{color:var(--drp-muted);font-size:.8em;transition:transform var(--drp-duration)}
+.drp-caret.up{transform:rotate(180deg)}
+/* Year/month grid is one month wide, not the whole two-month panel: 12 months spread
+   across ~600px read as oversized. */
+.drp-picker{width:calc(7 * var(--drp-cell))}
+.drp-picker .drp-head{justify-content:flex-start}
+.drp-opts{display:grid;gap:4px;align-content:start;padding:2px}
+.drp-years{max-height:calc(6 * var(--drp-cell));overflow-y:auto}
+.drp-years{grid-template-columns:repeat(4,1fr)}
+.drp-months{grid-template-columns:repeat(3,1fr)}
+.drp-opt{all:unset;cursor:pointer;height:32px;border-radius:16px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.drp-opt:hover:not(:disabled){background:var(--drp-hover)}
+.drp-opt[aria-selected="true"]{background:var(--drp-accent);color:var(--drp-accent-contrast);font-weight:600}
+.drp-opt:disabled{color:var(--drp-muted);cursor:default}
 .drp-grid{display:grid;grid-template-columns:repeat(7,var(--drp-cell))}
 .drp-dow{height:28px;display:grid;place-items:center;color:var(--drp-muted);font-size:12px}
 .drp-cell{position:relative;height:var(--drp-cell);display:grid;place-items:center}
@@ -79,6 +96,7 @@ const css = `
 @media (max-width:560px){
   .drp{--drp-gap:16px;padding:8px}
   .drp-grid{grid-template-columns:repeat(7,min(var(--drp-cell),12vw))}
+  .drp-picker{width:calc(7 * min(var(--drp-cell),12vw))}
   .drp-day{width:min(var(--drp-day),11vw);height:min(var(--drp-day),11vw)}
   .drp-field{width:100%}
 }

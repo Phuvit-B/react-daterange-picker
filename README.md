@@ -257,6 +257,17 @@ The full version, plus a dark variant built from the same tokens, is in
 
 ---
 
+## Jumping to a month or year
+
+Click the month title to get a grid of months; click the year at the top of that grid
+for a grid of years. Both are on by default. Turn either off:
+
+```tsx
+<DateRangePicker pickYear={false} />   // month grid only
+<DateRangePicker pickMonth={false} />  // title opens years, a year goes straight back to days
+<DateRangePicker pickMonth={false} pickYear={false} />  // just the ‹ › arrows
+```
+
 ## Marking days
 
 Days worth pointing out — appointments, holidays, the ones that are already booked — take a

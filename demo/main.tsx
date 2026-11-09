@@ -39,6 +39,18 @@ function App() {
         <DateRangePicker value={a} onChange={setA} />
       </Demo>
 
+      <Demo title="pickYear={false} — month grid only">
+        <DateRangePicker value={b} onChange={setB} locale={TH} pickYear={false} />
+      </Demo>
+
+      <Demo title="pickMonth={false} — year grid only">
+        <DateRangePicker value={b} onChange={setB} locale={TH} pickMonth={false} />
+      </Demo>
+
+      <Demo title="pickMonth={false} pickYear={false} — arrows only">
+        <DateRangePicker value={b} onChange={setB} locale={TH} pickMonth={false} pickYear={false} />
+      </Demo>
+
       <Demo title='พ.ศ. — locale="th" + .theme-thai'>
         <DateRangePicker value={b} onChange={setB} locale={TH}
           className="theme-thai" placeholder="เลือกช่วงวันที่" />

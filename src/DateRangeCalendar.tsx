@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
-import { addMonths, compareDay, inRange, monthGrid, nextRange, sameDay, startOfDay, clampRange, toISODate, type DateRange } from "./calendar";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
+import { addMonths, compareDay, inRange, monthGrid, monthBlocked, nextRange, sameDay, startOfDay, clampRange, toISODate, yearSpan, type DateRange } from "./calendar";
 import { injectStyles } from "./styles";
 
 export type DateRangeCalendarProps = {
@@ -21,6 +21,10 @@ export type DateRangeCalendarProps = {
   /** What the mark means, appended to the day's spoken label. Silent when omitted. */
   highlightLabel?: string;
   defaultMonth?: Date;
+  /** Click the month title to jump to a month from a grid. Default true. */
+  pickMonth?: boolean;
+  /** Click the year to jump to a year from a grid. Default true. */
+  pickYear?: boolean;
   className?: string;
   /** Handy for one-off theming: style={{ "--drp-accent": "#e91e63" } as CSSProperties}. */
   style?: CSSProperties;
@@ -29,17 +33,26 @@ export type DateRangeCalendarProps = {
 export function DateRangeCalendar({
   value, onChange, months = 2, locale, weekStartsOn = 0,
   minDate, maxDate, shouldDisableDate, defaultMonth, className = "", style,
-  highlightDates, highlightIcon, highlightLabel,
+  highlightDates, highlightIcon, highlightLabel, pickMonth = true, pickYear = true,
 }: DateRangeCalendarProps) {
   injectStyles();
   const [cursor, setCursor] = useState(() => addMonths(defaultMonth ?? value[0] ?? new Date(), 0));
   const [hover, setHover] = useState<Date | null>(null);
   const [dir, setDir] = useState(0);
+  // Title → month grid (its header year → year grid → back to months) → days.
+  // Either grid can be switched off; with only years, a year goes straight back to days.
+  const [view, setView] = useState<"day" | "year" | "month">("day");
+  const pickBox = useRef<HTMLDivElement>(null);
   const today = useMemo(() => startOfDay(new Date()), []);
 
   const dayName = useMemo(() => new Intl.DateTimeFormat(locale, { weekday: "narrow" }), [locale]);
   const monthName = useMemo(() => new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }), [locale]);
   const fullDate = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: "full" }), [locale]);
+  const shortMonth = useMemo(() => new Intl.DateTimeFormat(locale, { month: "short" }), [locale]);
+  // Only the year part: "th" says "พ.ศ. 2569" for { year }, the grid wants just "2569".
+  const yearDtf = useMemo(() => new Intl.DateTimeFormat(locale, { year: "numeric" }), [locale]);
+  const yearName = (y: number) =>
+    yearDtf.formatToParts(new Date(y, 0, 1)).find((p) => p.type === "year")?.value ?? String(y);
 
   const [start, end] = value;
   // While picking the second date, preview the range the pointer is over.
@@ -101,10 +114,87 @@ export function DateRangeCalendar({
     const dy = e.clientY - origin.y;
     if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return; // a tap, or a page scroll
     const n = dx < 0 ? 1 : -1;
-    if ((n > 0 && nextBlocked) || (n < 0 && prevBlocked)) return;
+    if (view !== "day" || (n > 0 && nextBlocked) || (n < 0 && prevBlocked)) return;
     swiped.current = true;
     step(n);
   };
+
+  // Opening a grid: centre the current year/month in the scroll box and put focus on it,
+  // so arrows start from there. scrollTop rather than scrollIntoView, which would also
+  // scroll the page.
+  useEffect(() => {
+    const box = pickBox.current;
+    const on = box?.querySelector<HTMLElement>('[aria-selected="true"]');
+    if (!box || !on) return;
+    // Rects, not offsetTop: offsetTop counts from the nearest positioned ancestor (the
+    // popover), so the header above the grid pushed the active year off the bottom.
+    box.scrollTop += on.getBoundingClientRect().top - box.getBoundingClientRect().top - (box.clientHeight - on.offsetHeight) / 2;
+    on.focus({ preventScroll: true });
+  }, [view]);
+
+  const pick = (to: "day" | "year" | "month", next?: Date) => {
+    setDir(0);
+    if (next) setCursor(next);
+    setView(to);
+  };
+
+  // Arrow keys walk the grid; Escape backs out to days instead of closing the popover.
+  const onGridKey = (cols: number) => (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") { e.stopPropagation(); pick("day"); return; }
+    const move = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -cols, ArrowDown: cols }[e.key];
+    if (!move) return;
+    e.preventDefault();
+    const opts = Array.from(e.currentTarget.querySelectorAll<HTMLButtonElement>(".drp-opt"));
+    const i = opts.indexOf(document.activeElement as HTMLButtonElement);
+    for (let j = i + move; j >= 0 && j < opts.length; j += move) {
+      if (!opts[j].disabled) { opts[j].focus(); break; }
+    }
+  };
+
+  const caret = <span className={`drp-caret${view !== "day" ? " up" : ""}`} aria-hidden>▾</span>;
+
+  if (view !== "day") {
+    const y = cursor.getFullYear();
+    return (
+      <div className={`drp ${className}`.trim()} style={style}>
+        <div className="drp-month drp-picker">
+          <div className="drp-head">
+            {view === "month" && !pickYear ? (
+              <span className="drp-title static">{yearName(y)}</span>
+            ) : (
+              <button type="button" className="drp-title"
+                aria-label={view === "month" ? "Choose year" : pickMonth ? "Back to months" : "Back to days"}
+                onClick={() => pick(view === "month" ? "year" : pickMonth ? "month" : "day")}>
+                {view === "month" ? yearName(y) : monthName.format(cursor)}{caret}
+              </button>
+            )}
+          </div>
+          {view === "year" ? (
+            <div className="drp-opts drp-years" ref={pickBox} role="listbox" aria-label="Year" onKeyDown={onGridKey(4)}>
+              {yearSpan(cursor, minDate, maxDate).map((yy) => {
+                const blocked = (!!minDate && yy < minDate.getFullYear()) || (!!maxDate && yy > maxDate.getFullYear());
+                return (
+                  <button type="button" key={yy} className="drp-opt" role="option" aria-selected={yy === y}
+                    disabled={blocked} onClick={() => pick(pickMonth ? "month" : "day", new Date(yy, cursor.getMonth(), 1))}>
+                    {yearName(yy)}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="drp-opts drp-months" ref={pickBox} role="listbox" aria-label="Month" onKeyDown={onGridKey(3)}>
+              {Array.from({ length: 12 }, (_, mm) => (
+                <button type="button" key={mm} className="drp-opt" role="option" aria-selected={mm === cursor.getMonth()}
+                  disabled={monthBlocked(y, mm, minDate, maxDate)} onClick={() => pick("day", new Date(y, mm, 1))}>
+                  {shortMonth.format(new Date(y, mm, 1))}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`drp ${className}`.trim()} style={style} data-dir={dir || undefined}
@@ -118,7 +208,14 @@ export function DateRangeCalendar({
             <div className="drp-head">
               <button className="drp-nav" onClick={() => step(-1)} disabled={m > 0 || prevBlocked}
                 style={{ visibility: m > 0 ? "hidden" : undefined }} aria-label="Previous month" type="button">‹</button>
-              <span className={dir ? "drp-anim" : undefined} key={+month} aria-live="polite">{monthName.format(month)}</span>
+              {m === 0 && (pickMonth || pickYear) ? (
+                <button type="button" className="drp-title" onClick={() => pick(pickMonth ? "month" : "year")}
+                  aria-label={`${monthName.format(month)}, choose ${pickMonth ? "month" : "year"}`}>
+                  <span className={dir ? "drp-anim" : undefined} key={+month} aria-live="polite">{monthName.format(month)}</span>{caret}
+                </button>
+              ) : (
+                <span className={dir ? "drp-anim" : undefined} key={+month} aria-live="polite">{monthName.format(month)}</span>
+              )}
               <button className="drp-nav" onClick={() => step(1)} disabled={m < shown - 1 || nextBlocked}
                 style={{ visibility: m < shown - 1 ? "hidden" : undefined }} aria-label="Next month" type="button">›</button>
             </div>

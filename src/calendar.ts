@@ -32,6 +32,19 @@ export function inRange(day: Date, [start, end]: DateRange) {
 export const clampRange = (d: Date, min?: Date, max?: Date) =>
   (!min || compareDay(d, min) >= 0) && (!max || compareDay(d, max) <= 0);
 
+/** Years the year grid offers: the min/max bounds, else 1900–2099 like MUI. Always includes `around`. */
+export function yearSpan(around: Date, min?: Date, max?: Date): number[] {
+  const y = around.getFullYear();
+  const from = Math.min(min?.getFullYear() ?? 1900, y);
+  const to = Math.max(max?.getFullYear() ?? 2099, y);
+  return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+}
+
+/** A whole month lies outside [min, max], so there is nothing in it to pick. */
+export const monthBlocked = (year: number, month: number, min?: Date, max?: Date) =>
+  (!!min && compareDay(new Date(year, month + 1, 0), min) < 0) ||
+  (!!max && compareDay(new Date(year, month, 1), max) > 0);
+
 /**
  * YYYY-MM-DD in the user's own timezone. `toISOString().slice(0,10)` looks like it does
  * this but converts to UTC first, so east of Greenwich it reports the previous day.
