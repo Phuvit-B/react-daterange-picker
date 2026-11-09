@@ -42,6 +42,8 @@ export function DateRangeCalendar({
   // Title → month grid (its header year → year grid → back to months) → days.
   // Either grid can be switched off; with only years, a year goes straight back to days.
   const [view, setView] = useState<"day" | "year" | "month">("day");
+  // Which month column the grid was opened from: the picked month lands back in that column.
+  const [col, setCol] = useState(0);
   const pickBox = useRef<HTMLDivElement>(null);
   const today = useMemo(() => startOfDay(new Date()), []);
 
@@ -134,7 +136,7 @@ export function DateRangeCalendar({
 
   const pick = (to: "day" | "year" | "month", next?: Date) => {
     setDir(0);
-    if (next) setCursor(next);
+    if (next) setCursor(addMonths(next, -col));
     setView(to);
   };
 
@@ -154,7 +156,8 @@ export function DateRangeCalendar({
   const caret = <span className={`drp-caret${view !== "day" ? " up" : ""}`} aria-hidden>▾</span>;
 
   if (view !== "day") {
-    const y = cursor.getFullYear();
+    const base = addMonths(cursor, col);
+    const y = base.getFullYear();
     return (
       <div className={`drp ${className}`.trim()} style={style}>
         <div className="drp-month drp-picker">
@@ -165,17 +168,17 @@ export function DateRangeCalendar({
               <button type="button" className="drp-title"
                 aria-label={view === "month" ? "Choose year" : pickMonth ? "Back to months" : "Back to days"}
                 onClick={() => pick(view === "month" ? "year" : pickMonth ? "month" : "day")}>
-                {view === "month" ? yearName(y) : monthName.format(cursor)}{caret}
+                {view === "month" ? yearName(y) : monthName.format(base)}{caret}
               </button>
             )}
           </div>
           {view === "year" ? (
             <div className="drp-opts drp-years" ref={pickBox} role="listbox" aria-label="Year" onKeyDown={onGridKey(4)}>
-              {yearSpan(cursor, minDate, maxDate).map((yy) => {
+              {yearSpan(base, minDate, maxDate).map((yy) => {
                 const blocked = (!!minDate && yy < minDate.getFullYear()) || (!!maxDate && yy > maxDate.getFullYear());
                 return (
                   <button type="button" key={yy} className="drp-opt" role="option" aria-selected={yy === y}
-                    disabled={blocked} onClick={() => pick(pickMonth ? "month" : "day", new Date(yy, cursor.getMonth(), 1))}>
+                    disabled={blocked} onClick={() => pick(pickMonth ? "month" : "day", new Date(yy, base.getMonth(), 1))}>
                     {yearName(yy)}
                   </button>
                 );
@@ -184,7 +187,7 @@ export function DateRangeCalendar({
           ) : (
             <div className="drp-opts drp-months" ref={pickBox} role="listbox" aria-label="Month" onKeyDown={onGridKey(3)}>
               {Array.from({ length: 12 }, (_, mm) => (
-                <button type="button" key={mm} className="drp-opt" role="option" aria-selected={mm === cursor.getMonth()}
+                <button type="button" key={mm} className="drp-opt" role="option" aria-selected={mm === base.getMonth()}
                   disabled={monthBlocked(y, mm, minDate, maxDate)} onClick={() => pick("day", new Date(y, mm, 1))}>
                   {shortMonth.format(new Date(y, mm, 1))}
                 </button>
@@ -208,8 +211,8 @@ export function DateRangeCalendar({
             <div className="drp-head">
               <button className="drp-nav" onClick={() => step(-1)} disabled={m > 0 || prevBlocked}
                 style={{ visibility: m > 0 ? "hidden" : undefined }} aria-label="Previous month" type="button">‹</button>
-              {m === 0 && (pickMonth || pickYear) ? (
-                <button type="button" className="drp-title" onClick={() => pick(pickMonth ? "month" : "year")}
+              {pickMonth || pickYear ? (
+                <button type="button" className="drp-title" onClick={() => { setCol(m); pick(pickMonth ? "month" : "year"); }}
                   aria-label={`${monthName.format(month)}, choose ${pickMonth ? "month" : "year"}`}>
                   <span className={dir ? "drp-anim" : undefined} key={+month} aria-live="polite">{monthName.format(month)}</span>{caret}
                 </button>
